@@ -1,6 +1,7 @@
 from bs4 import BeautifulSoup, NavigableString, Declaration, Comment
 from urllib.request import Request, urlopen
 import re
+import codecs
 
 
 def get_recipe(url):
@@ -60,13 +61,14 @@ def get_recipe(url):
 
 if __name__ == "__main__":
 
-    #とりあえず10個のレシピで検証
-    for num in range(400000,400010):
+    list = []
+    for num in range(400000,401000):
         url = "https://cookpad.com/recipe/" + str(num)
         TITLE,SERVNUM,INGREDIENTNAME,INGREDIENTAMO = get_recipe(url)
 
-        print(url)
-        print(TITLE)
-        print(SERVNUM)
-        print(INGREDIENTNAME)
-        print(INGREDIENTAMO)
+        list = list + INGREDIENTAMO
+
+        f = codecs.open('list.txt', 'w', 'utf8') # 書き込みモードで開く
+        for x in list:
+            f.write(str(x) + "\n")
+        f.close() # ファイルを閉じる
