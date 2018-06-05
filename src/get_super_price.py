@@ -14,7 +14,7 @@ def scrape_page(url):
     return BeautifulSoup(page, "lxml")
 
 
-def get_page_items(url):
+def get_page_items(url, category_code):
     soup = scrape_page(url)
     tags = soup.find_all("li", class_="jsFlatHeight_list")
 
@@ -29,7 +29,13 @@ def get_page_items(url):
             # 補足情報(~個, ~gあたり...)
             'sub': tag.find("div", class_="nameRw").find_all('small')[1].text,
             # 値段
-            'price': tag.find("span", class_="price").find('strong').text,
+            'price': int(tag.find("span", class_="price").find('strong').text),
+            # 大項目
+            'category1code': int(category_code['category1code']),
+            # 中項目
+            'category2code': int(category_code['category2code']),
+            # 小項目
+            'category3code': int(category_code['category3code'])
         }
 
         items.append(item)
@@ -70,7 +76,13 @@ if __name__ == "__main__":
             print('pageNum : ' + str(pageNum))
 
             for x in range(0, pageNum):
-                items = get_page_items(url + '&currentPage=' + str(x + 1))
+                items = get_page_items(url + '&currentPage=' + str(x + 1), {
+                    'category1code': re.findall(r'parent1Code=(\d+)', url)[0],
+                    'category2code': re.findall(r'parent2Code=(\d+)', url)[0],
+                    'category3code': re.findall(
+                        r'searchCategoryCode=(\d+)', url
+                    )[0]
+                })
                 all_items.append(items)
 
     # flatten
@@ -79,7 +91,7 @@ if __name__ == "__main__":
     print("""
     ======================
       end scrape
-      length: {}
+      length : {}
     ======================
     """.format(len(all_items)))
 
@@ -88,9 +100,13 @@ if __name__ == "__main__":
     pp.pprint(all_items)
 
     for item in all_items:
-        arg = (item['name'], item['sub'], item['price'], item['icon'])
+        arg = (item['name'], item['sub'], item['price'], item['icon'],
+               item['category1code'], item['category2code'],
+               item['category3code'])
         cur.execute("""
-            INSERT INTO test.price (NAME,SUB,PRICE,ICON_IMG) VALUES (%s, %s, %s, %s);
+            INSERT INTO test.price
+            (NAME,SUB,PRICE,ICON_IMG,CATEGORY1CODE,CATEGORY2CODE,CATEGORY3CODE)
+            VALUES (%s, %s, %s, %s, %s, %s, %s);
             """, arg)
         con.commit()
 
