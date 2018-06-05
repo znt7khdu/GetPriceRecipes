@@ -29,8 +29,8 @@ def get_recipe(url):
         ammo.append(row.find("div", class_="amount").text)
 
     #取得した値を返り値に渡す
-    TITLE = title
-    SERVNUM = servnum
+    TITLE = re.sub('\n', '', title, flags=re.MULTILINE)
+    SERVNUM = re.sub('\n', '', servnum, flags=re.MULTILINE)
     INGREDIENTNAME = name
     INGREDIENTAMO = ammo
 
