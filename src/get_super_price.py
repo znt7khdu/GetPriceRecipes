@@ -4,6 +4,7 @@ import MySQLdb
 import re
 import json
 from itertools import chain
+from module.sql import sql_init
 
 
 def scrape_page(url):
@@ -56,16 +57,7 @@ def get_page_num(url):
 
 
 if __name__ == "__main__":
-
-    con = MySQLdb.connect(
-        user='',
-        passwd='',
-        host='',
-        db='',
-        charset='utf8'
-    )
-
-    cur = con.cursor()
+    con, cur = sql_init()
 
     all_items = []
 
