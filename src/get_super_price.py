@@ -30,7 +30,7 @@ def get_page_items(url, category_code):
             # 補足情報(~個, ~gあたり...)
             'sub': tag.find("div", class_="nameRw").find_all('small')[1].text,
             # 値段
-            'price': int(tag.find("span", class_="price").find('strong').text),
+            'price': int(tag.find("span", class_="price").find('strong').text.replace(',', '')),
             # 大項目
             'category1code': int(category_code['category1code']),
             # 中項目
