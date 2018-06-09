@@ -35,7 +35,8 @@ def getSynset(synset):
 
 
 def getWordsFromSynset(synset, lang):
-    cur = conn.execute("select word.* from sense, word where synset=? and word.lang=? and sense.wordid = word.wordid;", (synset,lang))
+    cur = conn.execute(
+        "select word.* from sense, word where synset=? and word.lang=? and sense.wordid = word.wordid;", (synset, lang))
     return [Word(*row) for row in cur]
 
 

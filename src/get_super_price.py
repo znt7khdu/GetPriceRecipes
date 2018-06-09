@@ -1,6 +1,5 @@
 from bs4 import BeautifulSoup
 from urllib.request import Request, urlopen
-import MySQLdb
 import re
 import json
 from itertools import chain
@@ -21,25 +20,45 @@ def get_page_items(url, category_code):
 
     items = []
 
+    category_code_formated = {
+        # 大項目
+        'category1code': int(category_code['category1code']),
+        # 中項目
+        'category2code': int(category_code['category2code']),
+        # 小項目
+        'category3code': int(category_code['category3code'])
+    }
+
     for tag in tags:
+        name = tag.find("div", class_="nameRw").find("strong").text.strip()
+        # 中黒以降の単位文字列の取得
+        names_sub = ''.join(re.findall(r'\u30fb([一-龥ぁ-んa-zァ-ン0-９]*)', name))
+        icon = tag.find("img").get("data-original")
+        price = int(
+            tag.find("span", class_="price").find('strong')
+            .text.replace(',', '')
+        )
+        # 値がない場合全角スペースが入っているため削除する
+        sub = tag.find("div", class_="nameRw").find_all('small')[1].text.strip()
+
+        # names_subとsubは同時に存在しないはず
+        # 存在する場合は調整する必要あり
+        if len(names_sub) > 0 and len(sub) > 0:
+            print(sub, names_sub)
+            raise Exception('names and sub is exists')
+
         item = {
             # アイコンの画像URL
-            'icon': tag.find("img").get("data-original"),
+            'icon': icon,
             # 商品名
-            'name': tag.find("div", class_="nameRw").find("strong").text,
+            'name': name,
             # 補足情報(~個, ~gあたり...)
-            'sub': tag.find("div", class_="nameRw").find_all('small')[1].text,
+            'sub': names_sub or sub,
             # 値段
-            'price': int(tag.find("span", class_="price").find('strong').text.replace(',', '')),
-            # 大項目
-            'category1code': int(category_code['category1code']),
-            # 中項目
-            'category2code': int(category_code['category2code']),
-            # 小項目
-            'category3code': int(category_code['category3code'])
+            'price': price
         }
 
-        items.append(item)
+        items.append({**item, **category_code_formated})
 
     print('this page items length : ' + str(len(items)))
 

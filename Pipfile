@@ -19,3 +19,4 @@ python_version = "3.6"
 [scripts]
 fix = "autopep8 -ivr ./src"
 lint = "flake8 ./src"
+get_price = "python src/get_super_price.py"
