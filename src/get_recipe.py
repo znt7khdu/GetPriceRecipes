@@ -62,7 +62,7 @@ def get_recipe(url):
 if __name__ == "__main__":
 
     # とりあえず10個のレシピで検証
-    for num in range(400000, 400010):
+    for num in range(400001, 400005):
         url = "https://cookpad.com/recipe/" + str(num)
         TITLE, SERVNUM, INGREDIENTNAME, INGREDIENTAMO = get_recipe(url)
 
