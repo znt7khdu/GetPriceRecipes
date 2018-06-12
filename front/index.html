@@ -12,15 +12,11 @@
     <!-- Bootstrap��JS�ǂݍ��� -->
     <script src="js/bootstrap.min.js"></script>
     <script type="text/javascript" src="js/setrecipe.js"></script>
-    <script src="https://code.jquery.com/jquery-3.1.0.min.js"></script>
     <script>
     $(function() {
 
-    //HTMLを初期化
-    $("table tbody").html("");
 
-    //HTMLを生成
-        $.getJSON("js/json/CookpadData.json", function(data){
+        $.getJSON("./js/json/CookpadData.json", function(data){
             var count = 0;
             $(data.CookpadData).each(function(){
                 $("#data_list").append("<tr id=\"data_id" + count + "\"></tr>");
