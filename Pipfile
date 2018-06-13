@@ -8,6 +8,11 @@ requests = "*"
 "beautifulsoup4" = "*"
 mysqlclient = "*"
 lxml = "*"
+gensim = "*"
+"mecab-python3" = "*"
+numpy = "*"
+tqdm = "*"
+neologdn = "*"
 
 [dev-packages]
 "flake8" = "*"

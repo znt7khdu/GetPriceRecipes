@@ -39,7 +39,9 @@ def get_page_items(url, category_code):
             .text.replace(',', '')
         )
         # 値がない場合全角スペースが入っているため削除する
-        sub = tag.find("div", class_="nameRw").find_all('small')[1].text.strip()
+        sub = tag.find(
+            "div", class_="nameRw"
+        ).find_all('small')[1].text.strip()
 
         # names_subとsubは同時に存在しないはず
         # 存在する場合は調整する必要あり
